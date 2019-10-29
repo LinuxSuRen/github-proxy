@@ -1,13 +1,13 @@
 package main
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
 	"github.com/spf13/cobra"
 	"log"
 	"net/http"
-	"net/url"
 	"os"
-	"strings"
 )
 
 var token string
@@ -42,15 +42,26 @@ func main()  {
 
 // curl -X POST -H "Accept: application/vnd.github.everest-preview+json" -H "Authorization: token ${TOKEN}" -i "https://api.github.com/repos/jenkins-zh/jenkins-zh/dispatches" -d '{"event_type":"repository_dispatch"}'
 func webhookHandler(writer http.ResponseWriter, request *http.Request)  {
-	formData := url.Values{"event_type": {"repository_dispatch"}}
-	payload := strings.NewReader(formData.Encode())
-	req, err := http.NewRequest("POST", "https://api.github.com/repos/jenkins-zh/jenkins-zh/dispatches", payload)
-	req.Header.Set("Accept", "application/vnd.github.everest-preview+json")
-	req.Header.Set("Authorization", fmt.Sprintf("token %s", token))
+	payload, err := json.Marshal(map[string]string{
+		"event_type": "repository_dispatch",
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+	req, err := http.NewRequest("POST",
+		"https://api.github.com/repos/jenkins-zh/jenkins-zh/dispatches",
+		bytes.NewBuffer(payload))
 	if err == nil {
+		req.Header.Add("Accept", "application/vnd.github.everest-preview+json")
+		req.Header.Add("Authorization", fmt.Sprintf("token %s", token))
 		client := http.Client{}
 
-		_, err = client.Do(req)
-		log.Print(err)
+		var response *http.Response
+		response, err = client.Do(req)
+		if err != nil {
+			log.Print(err)
+		} else if response.StatusCode != 204 {
+			fmt.Println(response)
+		}
 	}
 }
