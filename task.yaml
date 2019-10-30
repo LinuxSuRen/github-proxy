@@ -1,0 +1,12 @@
+name: Update Site
+triggers:
+- name: webhook
+  type: webhook
+  url: sample.io
+  token: token
+image: ubuntu
+env:
+- name: FOO
+  value: foo-value
+script: |
+  echo hello
