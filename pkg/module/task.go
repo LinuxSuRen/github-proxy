@@ -7,4 +7,5 @@ type PipelineTask struct {
 	Script string
 	Triggers []PipelineTrigger
 	Env []Entry
+	Workspace string
 }

@@ -67,6 +67,9 @@ func handleWebHookFromTask(task *module.PipelineTask, request *http.Request) err
 
 				array := strings.Split(task.Script, " ")
 				cmd := exec.Command(array[0], array[1:]...)
+				if task.Workspace != "" {
+					cmd.Dir = task.Workspace
+				}
 				err := cmd.Run()
 				if err != nil {
 					log.Fatal(err)

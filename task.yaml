@@ -11,5 +11,6 @@ image: ubuntu
 env:
 - name: FOO
   value: foo-value
+workspace: /var/
 script: |
   touch /Users/mac/zxj
