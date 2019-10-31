@@ -6,4 +6,5 @@ type PipelineTrigger struct {
 	Type string
 	URL string
 	Token string
+	Headers []Entry
 }

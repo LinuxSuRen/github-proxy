@@ -4,9 +4,12 @@ triggers:
   type: webhook
   url: sample.io
   token: token
+  headers:
+  - name: User-Agent
+    value: GitHub-Hookshot/b4238f9
 image: ubuntu
 env:
 - name: FOO
   value: foo-value
 script: |
-  echo hello
+  touch /Users/mac/zxj

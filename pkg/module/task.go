@@ -6,5 +6,5 @@ type PipelineTask struct {
 	Image string
 	Script string
 	Triggers []PipelineTrigger
-	Env []EnvEntry
+	Env []Entry
 }
